@@ -10,7 +10,7 @@ dotenv.config()
 connectToDb()
 const app = express()
 app.use(cors())
-
+app.use(express.json())
 app.use("/api/v1/", coinRouter)
 
 app.listen(process.env.PORT, () => {
