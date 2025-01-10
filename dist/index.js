@@ -15,6 +15,9 @@ const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use("/api/v1/", coinRoute_1.coinRouter);
+app.get("/", (_req, res) => {
+    res.json("Assignment");
+});
 app.listen(process.env.PORT, () => {
     console.log("server running");
     (0, backGroundJob_1.fetchCoinData)();
