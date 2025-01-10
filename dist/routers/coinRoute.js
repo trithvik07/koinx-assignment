@@ -14,17 +14,29 @@ const express_1 = require("express");
 const Coins_1 = require("../models/Coins");
 exports.coinRouter = (0, express_1.Router)();
 exports.coinRouter.get("/stats/:coinId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const coinId = req.params.coinId;
-    const data = yield Coins_1.CoinModel.findOne({ id: coinId }).sort({ _id: -1 });
-    res.json(data);
+    try {
+        const coinId = req.params.coinId;
+        const data = yield Coins_1.CoinModel.findOne({ id: coinId }).sort({ _id: -1 });
+        res.status(200).json(data);
+    }
+    catch (e) {
+        console.log("Error occured");
+        res.status(500).json({ error: e });
+    }
 }));
 exports.coinRouter.get("/deviation/:coinId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const coinId = req.params.coinId;
-    const documents = yield Coins_1.CoinModel.find({ id: coinId }).sort({ _id: -1 }).limit(100).select("current_price -_id");
-    const values = documents.map((d) => d.current_price);
-    const mean = values.reduce((tot, val) => tot + val, 0) / values.length;
-    const sqDiff = values.map(val => Math.pow(val - mean, 2));
-    const avgsqDiff = sqDiff.reduce((tot, val) => tot + val, 0) / values.length;
-    const std = Math.sqrt(avgsqDiff);
-    res.json(std);
+    try {
+        const coinId = req.params.coinId;
+        const documents = yield Coins_1.CoinModel.find({ id: coinId }).sort({ _id: -1 }).limit(100).select("current_price -_id");
+        const values = documents.map((d) => d.current_price);
+        const mean = values.reduce((tot, val) => tot + val, 0) / values.length;
+        const sqDiff = values.map(val => Math.pow(val - mean, 2));
+        const avgsqDiff = sqDiff.reduce((tot, val) => tot + val, 0) / values.length;
+        const std = Math.sqrt(avgsqDiff);
+        res.status(200).json(std);
+    }
+    catch (e) {
+        console.log("Error occured");
+        res.status(500).json({ error: e });
+    }
 }));
